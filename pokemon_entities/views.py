@@ -1,6 +1,6 @@
 import folium
 
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Pokemon, PokemonEntity
 import django.utils.timezone
 
@@ -60,7 +60,7 @@ def show_all_pokemons(request):
 
 
 def show_pokemon(request, pokemon_id):
-    pokemon = Pokemon.objects.get(id=pokemon_id)
+    pokemon = get_object_or_404(Pokemon, id=pokemon_id)
     now = django.utils.timezone.localtime()
 
     pokemon_entities = PokemonEntity.objects.filter(
@@ -85,7 +85,7 @@ def show_pokemon(request, pokemon_id):
 
         }
     next_evolution_pokemon = None
-    next_evolutions = pokemon.next_evolution.all()
+    next_evolutions = pokemon.next_evolutions.all()
     if next_evolutions.exists():
         next_pokemon = next_evolutions.first()
         next_evolution_img_url = DEFAULT_IMAGE_URL
